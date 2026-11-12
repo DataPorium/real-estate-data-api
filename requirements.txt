@@ -1,0 +1,2 @@
+dataporium @ git+https://github.com/DataPorium/dataporium-python.git
+pandas>=1.5
