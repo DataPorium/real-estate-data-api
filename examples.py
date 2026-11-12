@@ -19,15 +19,15 @@ from dataporium import DataPorium, to_frame
 
 # name: (question, method, parameters, key of the rows inside the answer)
 EXAMPLES = {
-    'homes-for-sale': ('Homes for sale in a ZIP code, 3+ bedrooms under $900,000', 'properties', {'zip': '92602', 'beds_min': 3, 'price_max': 900000, 'sort': 'newest', 'limit': 25}, None),
-    'homes-for-rent': ('Homes for rent in a city', 'properties', {'city': 'Austin', 'state': 'TX', 'status': 'rent', 'beds_min': 2, 'price_max': 3000, 'limit': 25}, None),
-    'homes-sold': ('Homes sold in the last 90 days', 'properties', {'zip': '78704', 'status': 'sold', 'sold_within_days': 90, 'sort': 'newest', 'limit': 25}, None),
+    'homes-for-sale': ('Homes for sale in a ZIP code, 3+ bedrooms under $900,000', 'properties', {'zip': '92602', 'beds_min': 3, 'price_max': 900000, 'sort': 'newest', 'limit': 25}, 'homes'),
+    'homes-for-rent': ('Homes for rent in a city', 'properties', {'city': 'Austin', 'state': 'TX', 'status': 'rent', 'beds_min': 2, 'price_max': 3000, 'limit': 25}, 'homes'),
+    'homes-sold': ('Homes sold in the last 90 days', 'properties', {'zip': '78704', 'status': 'sold', 'sold_within_days': 90, 'sort': 'newest', 'limit': 25}, 'homes'),
     'home-by-address': ('One home in full, by address', 'properties', {'address': '41 Carpenteria, Irvine CA'}, None),
-    'price-cuts': ('Homes with a price cut in the last 7 days, biggest cut first', 'properties', {'city': 'Irvine', 'state': 'CA', 'price_cut': True, 'price_cut_within_days': 7, 'sort': 'biggest_cut', 'limit': 25}, None),
+    'price-cuts': ('Homes with a price cut in the last 7 days, biggest cut first', 'properties', {'city': 'Irvine', 'state': 'CA', 'price_cut': True, 'price_cut_within_days': 7, 'sort': 'biggest_cut', 'limit': 25}, 'homes'),
     'price-changes': ('Every price cut, increase and relist in a ZIP code', 'realestate_price_changes', {'zip_code': '92602', 'include_events': True}, None),
-    'below-area-price': ("Homes priced at least 10% below the ZIP code's price per square foot", 'properties', {'zip': '85032', 'below_area_ppsf_pct': 10, 'sort': 'best_value', 'limit': 25}, None),
-    'stale-listings': ('Homes on the market for more than 90 days in the whole selling effort', 'properties', {'county': 'Maricopa', 'state': 'AZ', 'true_dom_min': 90, 'sort': 'dom_desc', 'limit': 25}, None),
-    'monthly-payment': ('Homes with an estimated monthly payment (10% down, 6.5% rate)', 'properties', {'zip': '75034', 'with_payment': True, 'down_payment_pct': 10, 'interest_rate': 6.5, 'limit': 25}, None),
+    'below-area-price': ("Homes priced at least 10% below the ZIP code's price per square foot", 'properties', {'zip': '85032', 'below_area_ppsf_pct': 10, 'sort': 'best_value', 'limit': 25}, 'homes'),
+    'stale-listings': ('Homes on the market for more than 90 days in the whole selling effort', 'properties', {'county': 'Maricopa', 'state': 'AZ', 'true_dom_min': 90, 'sort': 'dom_desc', 'limit': 25}, 'homes'),
+    'monthly-payment': ('Homes with an estimated monthly payment (10% down, 6.5% rate)', 'properties', {'zip': '75034', 'with_payment': True, 'down_payment_pct': 10, 'interest_rate': 6.5, 'limit': 25}, 'homes'),
     'property-tax': ('Property tax rates of a ZIP code', 'property_tax', {'zip': '77493'}, None),
     'mortgage-lending': ('Home purchase loans in a county: applications, approval rate, loan sizes, top lenders', 'mortgage_lending_summary', {'state': 'TX', 'county': 'Travis', 'purpose': 'purchase', 'top': 10}, None),
     'local-jobs': ('Unemployment in a county, month by month', 'local_jobs', {'area_type': 'county', 'state': 'TX', 'county': 'Travis', 'date_from': '2024-01'}, None),
@@ -44,7 +44,7 @@ def rows(answer, key=None):
         frame = to_frame(answer, key=key)
     except (KeyError, TypeError):
         return None
-    return frame if len(frame.columns) > 1 or len(frame) > 1 else None
+    return frame if len(frame) > 1 else None  # one record reads better as JSON
 
 
 def main(argv: list[str] | None = None) -> int:

@@ -14,7 +14,7 @@ from dataporium import DataPorium, to_frame
 
 dp = DataPorium()   # reads DATAPORIUM_API_KEY
 answer = dp.properties(zip="92602", beds_min=3, price_max=900000, sort="newest", limit=25)
-print(to_frame(answer).head())
+print(to_frame(answer, key="homes").head())
 ```
 
 Or run any example below from this repository:
